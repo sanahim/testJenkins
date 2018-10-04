@@ -1,0 +1,196 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworkName": {
+      "value": "VNet1"
+    },
+    "vNetAddressSpaces": {
+      "value": "10.0.0.0/16"
+    },
+    "location": {
+      "value": "usgovvirginia"
+    },
+    "virtualNetworkTags": {
+      "value":{
+        "Environment":"Internal",
+        "Type":"Transit"
+      }
+    },
+    "numberOfSubnets":{
+      "value": 3
+    },
+    "subnets":{
+      "value":{
+        "subnetProperties":[
+          {
+            "name":"firstSubnet",
+            "addressPrefix":"10.0.0.0/24"
+          },
+          {
+            "name":"secondSubnet",
+            "addressPrefix":"10.0.1.0/24"
+          },
+          {
+            "name":"thirdSubnet",
+            "addressPrefix":"10.0.3.0/24"
+          }
+        ]        
+      }
+    },
+    "numberOfNSGs":{
+      "value": 2
+    },
+    "networkSecurityGroups":{
+      "value": {
+        "nsgProperties":[
+          {
+            "name":"firstNSG",
+            "nsgTags":
+              {
+                "displayName" : "NSG1",
+                "type":"Front End"
+              },
+            "securityRules":[
+              {
+                "name" : "Allow_RDP",
+                "properties" :
+                  {
+                    "description" : "Allow RDP",
+                    "protocol": "Tcp",
+                    "sourcePortRange": null,
+                    "sourcePortRanges": [
+                      "80",
+                      "1024"
+                    ],
+                    "destinationPortRange": null,
+                    "destinationPortRanges":[
+                      "3389",
+                      "80"
+                    ],
+                    "sourceAddressPrefix":null,
+                    "sourceAddressPrefixes":[
+                      "10.0.0.0/24",
+                      "10.0.1.0/24"
+                    ],
+                    "destinationAddressPrefix":null,
+                    "destinationAddressPrefixes":[
+                      "10.0.2.0/24"
+                    ],
+                    "access": "Allow",
+                    "priority": 100,
+                    "direction": "Inbound"
+                  }
+              },
+              {
+                "name" : "Allow_Outbound",
+                "properties" :
+                  {
+                    "description" : "Allow Outbound",
+                    "protocol": "*",
+                    "sourcePortRange": "*",
+                    "sourcePortRanges": [
+                      
+                    ],
+                    "destinationPortRange": "*",
+                    "destinationPortRanges":[
+                      
+                    ],
+                    "sourceAddressPrefix":null,
+                    "sourceAddressPrefixes":[
+                      "10.0.2.0/24",
+                      "10.0.1.0/24"
+                    ],
+                    "destinationAddressPrefix":null,
+                    "destinationAddressPrefixes":[
+                      "10.0.0.0/24"
+                    ],
+                    "access": "Allow",
+                    "priority": 201,
+                    "direction": "Outbound"
+                  }
+              }
+            ]
+          },  
+          {
+            "name":"secondNSG",
+            "nsgTags":
+              {
+                "displayName" : "NSG2"
+              },
+            "securityRules":[
+              {
+                "name" : "Allow_RDP",
+                "properties" :
+                  {
+                    "description" : "Allow RDP",
+                    "protocol": "Tcp",
+                    "sourcePortRange": null,
+                    "sourcePortRanges":[ 
+                      "1024-65535"
+                    ],
+                    "destinationPortRange": null,
+                    "destinationPortRanges":[
+                      "3389",
+                      "80"
+                    ],
+                    "sourceAddressPrefix":"*",
+                    "sourceAddressPrefixes":[
+                      
+                    ],
+                    "destinationAddressPrefix":null,
+                    "destinationAddressPrefixes":[
+                      "10.0.2.0/24"
+                    ],
+                    "access": "Allow",
+                    "priority": 100,
+                    "direction": "Inbound"
+                  }
+              },
+              {
+                "name" : "Allow_Outbound",
+                "properties" :
+                  {
+                    "description" : "Allow Outbound",
+                    "protocol": "*",
+                    "sourcePortRange": "*",
+                    "sourcePortRanges":[ 
+                      
+                    ],
+                    "destinationPortRange": null,
+                    "destinationPortRanges":[
+                      "53"
+                    ],
+                    "sourceAddressPrefix":null,
+                    "sourceAddressPrefixes":[
+                      "10.0.2.0/24",
+                      "10.0.1.0/24"
+                    ],
+                    "destinationAddressPrefix":"*",
+                    "destinationAddressPrefixes":[
+                      
+                    ],
+                    "access": "Allow",
+                    "priority": 201,
+                    "direction": "Outbound"
+                  }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "erGatewayName": {
+      "value": "TestERGW"
+    },
+    "erGatewayPublicIPName": {
+      "value": "ERGWPIP"
+    },
+    "erGatewaySku": {
+      "value": "HighPerformance"
+    },
+    "GatewaySubnetPrefix": {
+      "value": "10.0.2.0/24"
+    }
+  }
+}
